@@ -1,3 +1,23 @@
+# Lint and type hygiene
+
+Clears the warnings the community plugin scorecard reports, other than the
+forbidden `style` element, which is handled separately.
+
+- [x] Build the Edit Mode widgets with `createSpan()` and adopt them into the
+  editor's own document, so popout windows get nodes that belong to them. This
+  also uses the `view` argument that was previously ignored.
+- [x] Declare `@codemirror/language`, `@codemirror/state`, `@codemirror/view` and
+  `@lezer/common`. They were imported but never declared, which is why
+  `SyntaxNode` and `SyntaxNodeRef` resolved to error types acting as `any`.
+  `@codemirror/state` and `@codemirror/view` are pinned to the versions
+  `obsidian` requires as peers.
+- [x] Drop `codemirror` and `@codemirror/stream-parser`. Neither is imported, and
+  the latter was pulled from a raw GitHub URL.
+- [x] Type the settings load instead of assigning the `any` that `Object.assign`
+  returns, and copy the arrays so the settings tab no longer writes through into
+  `DEFAULT_SETTINGS`.
+- [x] Sentence case for the two settings headings.
+- [x] `prefer-const` throughout.
 # Read Mode without a runtime stylesheet
 
 Obsidian does not allow plugins to create and attach `style` elements, which is

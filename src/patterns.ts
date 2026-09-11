@@ -38,9 +38,9 @@ export function cssString(value: string): string {
  * string, which is how bullets and unnumbered markers are expressed.
  */
 export function createMarkerContent(pattern: string): string {
-    let numberchar = (pattern.match(/(a{1,2}|A{1,2}|i|I|①|1)/) || "")[0];
+    const numberchar = (pattern.match(/(a{1,2}|A{1,2}|i|I|①|1)/) || "")[0];
     if (!numberchar) return cssString(pattern);
-    let [prefix, suffix] = pattern.split(RegExp(`${numberchar}(.*)`));
+    const [prefix, suffix] = pattern.split(RegExp(`${numberchar}(.*)`));
     return [
         prefix && cssString(prefix),
         `counter(list-item, ${COUNTER_STYLES[numberchar]})`,
@@ -67,7 +67,7 @@ const romanLookup = [
  */
 function romanize (num: number): string {
     let roman = '';
-    for (let [a, b] of romanLookup) {
+    for (const [a, b] of romanLookup) {
         roman += (a as string).repeat(Math.floor(num / (b as number)));
         num %= (b as number);
     }
@@ -89,9 +89,9 @@ const circled = [
  * Render a given pattern for the given enumerator number. Return the corresponding counter as string.
  */
 export function renderPattern(pattern: string, e: number): string {
-    let numberchar = (pattern.match(/(a{1,2}|A{1,2}|i|I|①|1)/) || "")[0];
+    const numberchar = (pattern.match(/(a{1,2}|A{1,2}|i|I|①|1)/) || "")[0];
     if (numberchar) {
-        let [prefix, suffix] = pattern.split(RegExp(`${numberchar}(.*)`));
+        const [prefix, suffix] = pattern.split(RegExp(`${numberchar}(.*)`));
         let number = "" + e;
         switch (numberchar) {
             case "A": number = alphanum(e); break;

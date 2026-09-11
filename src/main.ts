@@ -111,9 +111,17 @@ export default class LawListPlugin extends Plugin {
 	}
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		const saved = await this.loadData() as Partial<LawListSettings> | null;
+		// The arrays are copied because the settings tab writes into them in place.
+		// Sharing them with DEFAULT_SETTINGS would leave the defaults holding the
+		// user's values after the first edit.
+		this.settings = {
+			...DEFAULT_SETTINGS,
+			...saved,
+			ol_input: [...(saved?.ol_input ?? DEFAULT_SETTINGS.ol_input)],
+			ul_input: [...(saved?.ul_input ?? DEFAULT_SETTINGS.ul_input)]
+		};
 		this.computePatterns();
-		// this.settings.ol_input = this.settings.ol_input; // What was this for? Should have no effect.
 	}
 
 	computePatterns() {
@@ -157,7 +165,7 @@ class LawListSettingsTab extends PluginSettingTab {
 		desc.appendChild(createEl("br"));
 		desc.appendChild(createEl("br"));
 
-		new Setting(containerEl).setName("Ordered List Styles").setHeading();
+		new Setting(containerEl).setName("Ordered list styles").setHeading();
 		const desc2 = containerEl.createEl("p");
 		desc2.classList.add("lawlist-settings-desc");
 		desc2.appendText("For each indentation level in ordered lists, type in the first enumerator. Supported numbering systems are:");
@@ -178,7 +186,7 @@ class LawListSettingsTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}));
 		}
-		new Setting(containerEl).setName("Unordered List Styles").setHeading();
+		new Setting(containerEl).setName("Unordered list styles").setHeading();
 		const desc3 = containerEl.createEl("p");
 		desc3.classList.add("lawlist-settings-desc");
 		desc3.appendText("For each indentation level in unordered lists, type in any character/sequence as bullet.");
