@@ -1,3 +1,18 @@
+# Build and release
+
+- [x] Add `.github/workflows/release.yml`, matching the one Obsidian ships in
+  its sample plugin. It builds on a tag, attests `main.js` and `styles.css`, and
+  opens a draft release with those two plus `manifest.json`. The releases so far
+  were built by hand, which is why the scorecard reports two release assets
+  without a GitHub artifact attestation.
+- [x] The workflow also fails if the committed `styles.css` does not match what
+  the build produces, so the generated file cannot drift from its sources.
+- [x] Replace the `builtin-modules` dependency with `builtinModules` from
+  `node:module`, which has been in Node since 9.3.
+- [x] Fix the package metadata, which still described the Obsidian sample
+  plugin. The version was also stuck at 1.0.0, which matters because
+  `version-bump.mjs` copies it into `manifest.json`.
+
 # Lint and type hygiene
 
 Clears the warnings the community plugin scorecard reports, other than the
